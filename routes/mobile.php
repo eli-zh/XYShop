@@ -11,6 +11,9 @@
 |
 */
 
+Route::get('lock','Mobile\TestController@getLock');
+Route::get('lockget','Mobile\TestController@getLockget');
+
 // 手机版
 Route::group(['namespace' => 'Mobile','middleware'=>'member'],function(){
     // 首页
@@ -21,29 +24,35 @@ Route::group(['namespace' => 'Mobile','middleware'=>'member'],function(){
     Route::get('list/{id?}','HomeController@getList');
     // 商品页面
     Route::get('good/{id}','HomeController@getGood');
-    // 活动列表
-    Route::get('hot','HomeController@getHot');
-    Route::get('hot/{id}','HomeController@getHotList');
-
+    // 抢购商品
+    Route::get('timetobuy/{id}','TimetobuyController@getGood');
+    // 团购商品
+    Route::get('tuan/{id}','TuanController@getGood');
+    // 提交订单--活动的
+    Route::get('editorder/{oid}','OrderController@getEditorder');
     // 搜索
     Route::get('search','HomeController@getSearch');
+    // 活动列表
+    Route::get('hot','HotController@getHot');
+    Route::get('hot/{id}','HotController@getHotList');
+    // 活动商品
+    Route::get('hotgood/{id}','HotController@getGood');
     // 购物车
     Route::get('cart','OrderController@getCart');
     // 结算页面
-    Route::post('createorder','OrderController@postCreateorder');
     Route::get('createorder','OrderController@getCreateorder');
+    Route::post('createorder','OrderController@postCreateorder');
     // 选择支付方式页面
     Route::get('pay/{oid}','OrderController@getPay');
-
     // 以下是用户功能
     // 用户中心
     Route::get('center','UserController@getCenter');
     // 用户订单
-    Route::get('user/orderlist/{sid?}','UserController@getOrderlist');
-    Route::get('user/orderinfo/{id}','UserController@getOrderInfo');
+    Route::get('user/orderlist/{sid?}','UserOrderController@getOrderlist');
+    Route::get('user/orderinfo/{id}','UserOrderController@getOrderInfo');
     // 退换
-    Route::get('user/returngood/{ogid}','UserController@getReturnGood');
-    Route::post('user/returngood/{ogid}','UserController@postReturnGood');
+    Route::get('user/returngood/{ogid}','UserOrderController@getReturnGood');
+    Route::post('user/returngood/{ogid}','UserOrderController@postReturnGood');
     // 个人信息
     Route::get('userinfo','UserController@getUserinfo');
     Route::post('userinfo','UserController@postUserinfo');
@@ -57,6 +66,8 @@ Route::group(['namespace' => 'Mobile','middleware'=>'member'],function(){
     Route::post('user/recharge','RechargeController@postRecharge');
     // 优惠券
     Route::get('user/coupon','UserController@getCoupon');
+    // 签到
+    Route::get('user/signin','SignController@getSignin');
     // 地址
     Route::get('user/address','UserAddressController@getAddress');
     Route::get('user/address/add','UserAddressController@getAddressAdd');
@@ -70,7 +81,10 @@ Route::get('order/pay/{oid}','Pay\PayController@getTopay')->middleware('member')
 // 用户
 Route::group(['namespace' => 'Mobile'],function(){
     // 登陆
-    Route::get('login','UserController@getLogin');
+    Route::get('login','LoginController@getLogin');
+    Route::post('login','LoginController@postLogin');
     // 微信登陆页面
-    Route::get('wxlogin','UserController@getWxLogin');
+    Route::get('wxlogin','LoginController@getWxLogin');
 });
+// 退出登录
+Route::get('logout','Mobile\LoginController@getLogout');

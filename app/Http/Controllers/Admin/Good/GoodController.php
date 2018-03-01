@@ -13,7 +13,7 @@ use App\Models\Good\GoodSpec;
 use App\Models\Good\GoodSpecItem;
 use App\Models\Good\GoodSpecPrice;
 use App\Models\Good\GoodsAttr;
-use App\Models\Good\HdGood;
+use App\Models\Good\PromGood;
 use App\Models\Good\Tuan;
 use DB;
 use Illuminate\Http\Request;
@@ -101,7 +101,7 @@ class GoodController extends BaseController
     public function getNostore(Request $res)
     {
         $title = '无库存商品列表';
-        $list = Good::with('goodspecprice')->where('status',1)->where('store',0)->orderBy('id','desc')->get()->keyBy('id');
+        $list = Good::with('goodspecprice')->where('status',1)->where('store',0)->orderBy('id','desc')->paginate(15);
         $count = $list->count();
         // 记录上次请求的url path，返回时用
         session()->put('backurl',$res->fullUrl());
@@ -327,7 +327,7 @@ class GoodController extends BaseController
                 // 购物车删除
                 Cart::whereIn('good_id',$ids)->delete();
                 // 活动
-                HdGood::whereIn('good_id',$ids)->delete();
+                PromGood::whereIn('good_id',$ids)->delete();
                 // 团购
                 Tuan::whereIn('good_id',$ids)->delete();
                 // 没出错，提交事务
@@ -469,7 +469,7 @@ class GoodController extends BaseController
                     $ids = GoodCate::where('id',$cate_id)->value('arrchildid');
                     $q->whereIn('cate_id',explode(',',$ids));
                 }
-            })->where('status',1)->where('prom_type',0)->orderBy('sort','desc')->orderBy('id','desc')->paginate(10);
+            })->where('status',1)->where('prom_type',0)->where('prom_id',0)->orderBy('sort','desc')->orderBy('id','desc')->paginate(10);
         return view('admin.good.select',compact('title','list','key','type','cate_id_1','cate_id_2','cate_id'));
     }
 }

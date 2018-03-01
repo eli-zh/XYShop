@@ -26,7 +26,7 @@
 
   <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8">
-      wx.config({!! $js->config(array('chooseWXPay'), false) !!});
+      wx.config({!! $js->buildConfig(array('chooseWXPay'), false) !!});
       wx.error(function(res){
         $('.alert_msg').text('微信支付配置失败！').slideToggle().delay(1500).slideToggle();
         setTimeout(function(){
@@ -35,7 +35,7 @@
       });
     $(function(){
       // 支付
-      setTimeout(function(){
+      wx.ready(function(){
         wx.chooseWXPay({
           timestamp: {{ $config['timestamp'] }},
           nonceStr: "{{ $config['nonceStr'] }}",
@@ -63,7 +63,7 @@
             },200);
           }
         });
-      },500);
+      });
     })
   </script>
 

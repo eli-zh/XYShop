@@ -26,6 +26,9 @@ Route::group(['prefix'=>'console','namespace' => 'Admin'],function(){
 });
 
 Route::group(['prefix'=>'console','middleware' => ['rbac'],'namespace' => 'Admin'],function(){
+    // 签到配置
+    Route::get('sign/config', 'User\SignController@getConfig');
+    Route::post('sign/config', 'User\SignController@postConfig');
     // 选择商品
     Route::get('good/select/{type?}', 'Good\GoodController@getSelect');
     // 抢购管理
@@ -70,6 +73,8 @@ Route::group(['prefix'=>'console','middleware' => ['rbac'],'namespace' => 'Admin
     Route::get('card/excel', 'User\CardController@getCardExcel');
     Route::get('card/add', 'User\CardController@getAdd');
     Route::post('card/add', 'User\CardController@postAdd');
+    Route::get('card/edit/{id}', 'User\CardController@getEdit');
+    Route::post('card/edit/{id}', 'User\CardController@postEdit');
     Route::post('card/del', 'User\CardController@postAlldel');
     // 退货管理
     Route::get('returngood/index', 'Good\RetrunGoodController@getIndex');
